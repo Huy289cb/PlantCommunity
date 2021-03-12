@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -34,6 +35,7 @@ public class MyPlantFragment extends Fragment {
 
     private ImageView addPlant;
     private RecyclerView recyclerViewMyPlants;
+    private TextView textNoPlant;
     private MyPlantAdapter myPlantAdapter;
     private List<Plant> mPlants;
 
@@ -46,6 +48,8 @@ public class MyPlantFragment extends Fragment {
 
         addPlant = view.findViewById(R.id.add_plant);
         recyclerViewMyPlants = view.findViewById(R.id.recycle_view_my_plants);
+        textNoPlant = view.findViewById(R.id.text_error);
+        textNoPlant.setVisibility(View.GONE);
         recyclerViewMyPlants.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setStackFromEnd(true);
@@ -80,7 +84,12 @@ public class MyPlantFragment extends Fragment {
                         mPlants.add(plant);
                     }
                 }
-                myPlantAdapter.notifyDataSetChanged();
+                if (mPlants.size() == 0) {
+                    textNoPlant.setVisibility(View.VISIBLE);
+                } else {
+                    textNoPlant.setVisibility(View.GONE);
+                    myPlantAdapter.notifyDataSetChanged();
+                }
             }
 
             @Override
@@ -88,6 +97,5 @@ public class MyPlantFragment extends Fragment {
 
             }
         });
-
     }
 }

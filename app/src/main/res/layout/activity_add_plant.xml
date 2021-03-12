@@ -14,49 +14,72 @@
         android:background="?android:attr/windowBackground">
 
         <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="?android:attr/windowBackground"
-            android:id="@+id/toolbar">
+            android:layout_height="wrap_content"
+            android:background="?android:attr/windowBackground">
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:src="@drawable/ic_close"
-                    android:id="@+id/close"
-                    android:padding="8dp"/>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/close"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:padding="8dp"
+                        android:src="@drawable/ic_close" />
+
+                    <TextView
+                        android:id="@+id/title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="20dp"
+                        android:layout_toEndOf="@+id/close"
+                        android:text="tittle"
+                        android:textAllCaps="true"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/save"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="15dp"
+                        android:padding="5dp"
+                        android:text="LƯU"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                </RelativeLayout>
 
                 <TextView
+                    android:layout_marginTop="5dp"
+                    android:id="@+id/progress_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toEndOf="@+id/close"
-                    android:text="tittle"
-                    android:textAllCaps="true"
-                    android:layout_centerVertical="true"
-                    android:id="@+id/title"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:layout_marginLeft="20dp"
-                    android:textColor="@color/colorPrimaryDark"/>
+                    android:layout_gravity="center"
+                    android:text="Đang tải lên 0.0%"
+                    android:textSize="12sp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="LƯU"
-                    android:id="@+id/save"
-                    android:textSize="18sp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="15dp"
-                    android:textColor="@color/colorPrimary"
-                    android:layout_centerVertical="true"
-                    android:padding="5dp"/>
+                <ProgressBar
+                    android:id="@+id/progress_bar"
+                    style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
-            </RelativeLayout>
+            </LinearLayout>
 
         </androidx.appcompat.widget.Toolbar>
 
@@ -89,20 +112,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:text="Chọn ảnh" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Đang tải lên 0.0%"
-                android:textSize="12sp"
-                android:id="@+id/progress_text"/>
-
-            <ProgressBar
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                android:id="@+id/progress_bar"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -185,37 +194,51 @@
                     android:maxLines="1" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <RelativeLayout
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Giai đoạn sinh trưởng - phát triển"
+                android:textSize="18sp"
+                android:layout_centerVertical="true"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimaryDark"
+                android:layout_marginTop="10dp"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/sowingDate"
+                    android:clickable="false"
+                    android:cursorVisible="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:inputType="date"
+                    android:hint="Ngày gieo hạt"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/plantDate"
+                    android:clickable="false"
+                    android:cursorVisible="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:inputType="date"
+                    android:hint="Ngày trồng cây/cấy"
                     android:layout_height="wrap_content"
-                    android:text="Giai đoạn sinh trưởng - phát triển"
-                    android:textSize="18sp"
-                    android:layout_centerVertical="true"
-                    android:textStyle="bold"
-                    android:textColor="@color/colorPrimaryDark"/>
+                    android:layout_width="match_parent"/>
 
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:src="@drawable/ic_add_box"
-                    android:id="@+id/add_growth"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"/>
-
-            </RelativeLayout>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:id="@+id/recycle_view_growth">
-
-            </androidx.recyclerview.widget.RecyclerView>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
