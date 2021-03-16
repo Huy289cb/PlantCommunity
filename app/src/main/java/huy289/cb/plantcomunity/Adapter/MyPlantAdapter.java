@@ -7,19 +7,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.google.android.material.snackbar.Snackbar;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 import huy289.cb.plantcomunity.AddPlantActivity;
-import huy289.cb.plantcomunity.CommentActivity;
 import huy289.cb.plantcomunity.Model.Plant;
 import huy289.cb.plantcomunity.R;
 
@@ -45,7 +46,13 @@ public class MyPlantAdapter extends RecyclerView.Adapter<MyPlantAdapter.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
         final Plant plant = mPlants.get(position);
-        Picasso.get().load(plant.getImageUrl()).into(holder.imagePlant);
+        Picasso.get().load(plant.getImageUrl())
+                .error(R.drawable.ic_error)
+                .placeholder(R.drawable.ic_leaf)
+                .resize(400, 400)
+                .centerCrop()
+                .onlyScaleDown()
+                .into(holder.imagePlant);
         holder.name.setText("Tên: " + plant.getName());
         holder.age.setText("Tuổi: " + plant.getAge());
         holder.address.setText("Địa chỉ: " + plant.getAddress());
@@ -58,7 +65,6 @@ public class MyPlantAdapter extends RecyclerView.Adapter<MyPlantAdapter.ViewHold
                 Intent intent = new Intent(mContext, AddPlantActivity.class);
                 intent.putExtra("plantId", plant.getId());
                 intent.putExtra("publisherId", plant.getPublisher());
-
                 mContext.startActivity(intent);
             }
         });
@@ -79,6 +85,7 @@ public class MyPlantAdapter extends RecyclerView.Adapter<MyPlantAdapter.ViewHold
         public TextView quantity;
         public TextView price;
         public Button btnDetail;
+        public RelativeLayout relativeLayout;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -90,6 +97,7 @@ public class MyPlantAdapter extends RecyclerView.Adapter<MyPlantAdapter.ViewHold
             quantity = itemView.findViewById(R.id.quantity);
             price = itemView.findViewById(R.id.price);
             btnDetail = itemView.findViewById(R.id.btn_detail);
+            relativeLayout = itemView.findViewById(R.id.relative_layout);
         }
     }
 

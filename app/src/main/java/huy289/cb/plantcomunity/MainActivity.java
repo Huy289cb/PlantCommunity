@@ -10,11 +10,14 @@ import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.ArrayList;
+
 import huy289.cb.plantcomunity.Fragments.HomeFragment;
 import huy289.cb.plantcomunity.Fragments.MyPlantFragment;
 import huy289.cb.plantcomunity.Fragments.ProfileFragment;
 import huy289.cb.plantcomunity.Fragments.SearchFragment;
 import huy289.cb.plantcomunity.Fragments.StoreFragment;
+import huy289.cb.plantcomunity.Model.Carts;
 
 public class MainActivity extends AppCompatActivity {
 

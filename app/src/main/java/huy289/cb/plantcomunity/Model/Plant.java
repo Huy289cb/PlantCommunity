@@ -12,11 +12,13 @@ public class Plant {
     private String price;
     private String address;
     private String publisher;
+    private String sowingDate;
+    private String plantDate;
 
     public Plant() {
     }
 
-    public Plant(String id, String imageUrl, String name, String age, String quantity, String price, String address, String publisher) {
+    public Plant(String id, String imageUrl, String name, String age, String quantity, String price, String address, String publisher, String sowingDate, String plantDate) {
         this.id = id;
         this.imageUrl = imageUrl;
         this.name = name;
@@ -25,6 +27,8 @@ public class Plant {
         this.price = price;
         this.address = address;
         this.publisher = publisher;
+        this.sowingDate = sowingDate;
+        this.plantDate = plantDate;
     }
 
     public String getId() {
@@ -89,5 +93,21 @@ public class Plant {
 
     public void setPublisher(String publisher) {
         this.publisher = publisher;
+    }
+
+    public String getSowingDate() {
+        return sowingDate;
+    }
+
+    public void setSowingDate(String sowingDate) {
+        this.sowingDate = sowingDate;
+    }
+
+    public String getPlantDate() {
+        return plantDate;
+    }
+
+    public void setPlantDate(String plantDate) {
+        this.plantDate = plantDate;
     }
 }

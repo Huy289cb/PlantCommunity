@@ -3,9 +3,11 @@ package huy289.cb.plantcomunity;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -14,6 +16,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -40,9 +43,17 @@ import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.io.ByteArrayOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 
+import huy289.cb.plantcomunity.Adapter.MyPlantAdapter;
+import huy289.cb.plantcomunity.Adapter.PreventionAdapter;
 import huy289.cb.plantcomunity.Model.Plant;
+import huy289.cb.plantcomunity.Model.Prevention;
 
 public class AddPlantActivity extends AppCompatActivity {
 
@@ -60,11 +71,15 @@ public class AddPlantActivity extends AppCompatActivity {
     private EditText price;
     private Button delete;
 
-    private ImageView addGrowth;
-    private RecyclerView recyclerViewGrowth;
+    //Growth
+    private final Calendar myCalendar = Calendar.getInstance();
+    private EditText sowingDate;
+    private EditText plantDate;
 
     private ImageView addPrevention;
     private RecyclerView recyclerViewPrevention;
+    private List<Prevention> mPreventions;
+    private PreventionAdapter preventionAdapter;
 
     private FirebaseUser fUser;
 
@@ -83,7 +98,7 @@ public class AddPlantActivity extends AppCompatActivity {
         getViews();
         fUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        Intent intent = getIntent();
+        final Intent intent = getIntent();
         plantId = intent.getStringExtra("plantId");
         pulisherId = intent.getStringExtra("publisherId");
 
@@ -99,27 +114,25 @@ public class AddPlantActivity extends AppCompatActivity {
                 title.setText("Cập nhật cây");
                 chooseImage.setVisibility(View.VISIBLE);
                 save.setVisibility(View.VISIBLE);
-                addGrowth.setVisibility(View.VISIBLE);
                 addPrevention.setVisibility(View.VISIBLE);
-//                chooseImage.setText("Thay đổi ảnh");
                 chooseImage.setVisibility(View.GONE);
                 delete.setVisibility(View.VISIBLE);
-                enableEditText(name);
-                enableEditText(age);
-                enableEditText(address);
-                enableEditText(quantity);
-                enableEditText(price);
                 FirebaseDatabase.getInstance().getReference("Plants")
                         .child(plantId).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         Plant plant = snapshot.getValue(Plant.class);
-                        Picasso.get().load(plant.getImageUrl()).into(imageAdded);
+                        Picasso.get().load(plant.getImageUrl())
+                                .error(R.drawable.ic_error)
+                                .placeholder(R.drawable.ic_leaf)
+                                .into(imageAdded);
                         name.setText(plant.getName());
                         age.setText(plant.getAge());
                         address.setText(plant.getAddress());
                         quantity.setText(plant.getQuantity());
-                        price.setText(plant.getPrice() + "");
+                        price.setText(plant.getPrice());
+                        sowingDate.setText(plant.getSowingDate());
+                        plantDate.setText(plant.getPlantDate());
                     }
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
@@ -132,19 +145,21 @@ public class AddPlantActivity extends AppCompatActivity {
                         updatePlant();
                     }
                 });
+                addPrevention.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intentPrevention = new Intent(AddPlantActivity.this, PreventionActivity.class);
+                        intentPrevention.putExtra("plantId", plantId);
+                        startActivity(intentPrevention);
+                    }
+                });
 
             } else {
                 //disable view
                 title.setText("Chi tiết cây");
                 chooseImage.setVisibility(View.GONE);
                 save.setVisibility(View.GONE);
-                addGrowth.setVisibility(View.GONE);
                 addPrevention.setVisibility(View.GONE);
-                disableEditText(name);
-                disableEditText(age);
-                disableEditText(address);
-                disableEditText(quantity);
-                disableEditText(price);
 
             }
         } else {
@@ -165,6 +180,31 @@ public class AddPlantActivity extends AppCompatActivity {
             }
         });
 
+        sowingDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editTextPickerDate(sowingDate);
+            }
+        });
+
+        plantDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editTextPickerDate(plantDate);
+            }
+        });
+
+        recyclerViewPrevention.setHasFixedSize(true);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setStackFromEnd(true);
+        linearLayoutManager.setReverseLayout(true);
+        recyclerViewPrevention.setLayoutManager(linearLayoutManager);
+        mPreventions = new ArrayList<>();
+
+        preventionAdapter = new PreventionAdapter(this, mPreventions);
+        recyclerViewPrevention.setAdapter(preventionAdapter);
+        getPreventions();
+
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -172,10 +212,24 @@ public class AddPlantActivity extends AppCompatActivity {
             }
         });
 
-        addGrowth.setOnClickListener(new View.OnClickListener() {
+    }
+
+    private void getPreventions() {
+        FirebaseDatabase.getInstance().getReference("Preventions").addValueEventListener(new ValueEventListener() {
             @Override
-            public void onClick(View v) {
-                //go to activity add growth;
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                mPreventions.clear();
+                for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
+                    Prevention prevention = dataSnapshot.getValue(Prevention.class);
+                    if(prevention.getPlantId().equals(plantId)) {
+                        mPreventions.add(prevention);
+                    }
+                }
+                preventionAdapter.notifyDataSetChanged();
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
 
@@ -218,6 +272,8 @@ public class AddPlantActivity extends AppCompatActivity {
         map.put("address", address.getText().toString());
         map.put("quantity", quantity.getText().toString());
         map.put("price", price.getText().toString());
+        map.put("sowingDate", sowingDate.getText().toString());
+        map.put("plantDate", plantDate.getText().toString());
 
         FirebaseDatabase.getInstance().getReference("Plants")
                 .child(plantId).updateChildren(map).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -229,18 +285,6 @@ public class AddPlantActivity extends AppCompatActivity {
             }
         });
 
-    }
-
-    private void disableEditText(EditText editText) {
-        editText.setFocusable(false);
-        editText.setEnabled(false);
-        editText.setCursorVisible(false);
-    }
-
-    private void enableEditText(EditText editText) {
-        editText.setFocusable(true);
-        editText.setEnabled(true);
-        editText.setCursorVisible(true);
     }
 
     private void savePlant() {
@@ -255,8 +299,6 @@ public class AddPlantActivity extends AppCompatActivity {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 12, baos);
             byte[] data = baos.toByteArray();
-
-            //check user
 
             final StorageReference firePath = FirebaseStorage.getInstance()
                     .getReference("Plants").child(System.currentTimeMillis() + ".jpeg");
@@ -294,15 +336,17 @@ public class AddPlantActivity extends AppCompatActivity {
                     map.put("address", address.getText().toString());
                     map.put("quantity", quantity.getText().toString());
                     map.put("price", price.getText().toString());
+                    map.put("sowingDate", sowingDate.getText().toString());
+                    map.put("plantDate", plantDate.getText().toString());
                     map.put("publisher", fUser.getUid());
 
                     ref.child(plantId).setValue(map);
 
                     progressText.setVisibility(View.GONE);
                     progressBar.setVisibility(View.GONE);
-                    addGrowth.setVisibility(View.VISIBLE);
                     addPrevention.setVisibility(View.VISIBLE);
-                    Toast.makeText(AddPlantActivity.this, "Đã lưu thay đổi", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddPlantActivity.this, "Đã thêm thành công", Toast.LENGTH_LONG).show();
+                    finish();
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
@@ -331,6 +375,29 @@ public class AddPlantActivity extends AppCompatActivity {
         }
     }
 
+    private void editTextPickerDate(final EditText editText) {
+        DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                // TODO Auto-generated method stub
+                myCalendar.set(Calendar.YEAR, year);
+                myCalendar.set(Calendar.MONTH, monthOfYear);
+                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                updateLabel(editText);
+            }
+        };
+        new DatePickerDialog(AddPlantActivity.this, date, myCalendar
+                .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+    }
+
+    private void updateLabel(EditText editText) {
+        String myFormat = "dd/MM/yyyy"; //In which you need put here
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+
+        editText.setText(sdf.format(myCalendar.getTime()));
+    }
+
     private void getViews() {
         close = findViewById(R.id.close);
         title = findViewById(R.id.title);
@@ -344,8 +411,8 @@ public class AddPlantActivity extends AppCompatActivity {
         address = findViewById(R.id.address);
         quantity = findViewById(R.id.quantity);
         price = findViewById(R.id.price);
-        addGrowth = findViewById(R.id.add_growth);
-        recyclerViewGrowth = findViewById(R.id.recycle_view_growth);
+        sowingDate = findViewById(R.id.sowingDate);
+        plantDate = findViewById(R.id.plantDate);
         addPrevention = findViewById(R.id.add_prevention);
         recyclerViewPrevention = findViewById(R.id.recycle_view_prevention);
         delete = findViewById(R.id.delete);
@@ -353,7 +420,6 @@ public class AddPlantActivity extends AppCompatActivity {
 //        set visible
         progressText.setVisibility(View.GONE);
         progressBar.setVisibility(View.GONE);
-        addGrowth.setVisibility(View.GONE);
         addPrevention.setVisibility(View.GONE);
         delete.setVisibility(View.GONE);
     }
