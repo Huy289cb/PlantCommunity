@@ -281,6 +281,7 @@ public class AddPlantActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                     Toast.makeText(AddPlantActivity.this, "Đã lưu thay đổi", Toast.LENGTH_SHORT).show();
+                    finish();
                 }
             }
         });

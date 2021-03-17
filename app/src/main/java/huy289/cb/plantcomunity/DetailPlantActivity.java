@@ -8,6 +8,6 @@ public class DetailPlantActivity extends AppCompatActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.detail_plant);
+        setContentView(R.layout.activity_detail_plant);
     }
 }

@@ -1,55 +1,26 @@
 package huy289.cb.plantcomunity.Model;
 
-public class Carts {
-    private String id;
-    private String imageUrl;
-    private String name;
-    private String price;
+public class Cart {
+
+    private String plantId;
     private String quantity;
-    private String publisherId;
+    private String price;
 
-    public Carts() {
+    public Cart() {
     }
 
-    public Carts(String id, String imageUrl, String name, String price, String quantity, String publisherId) {
-        this.id = id;
-        this.imageUrl = imageUrl;
-        this.name = name;
-        this.price = price;
+    public Cart(String plantId, String quantity, String price) {
+        this.plantId = plantId;
         this.quantity = quantity;
-        this.publisherId = publisherId;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPrice() {
-        return price;
-    }
-
-    public void setPrice(String price) {
         this.price = price;
+    }
+
+    public String getPlantId() {
+        return plantId;
+    }
+
+    public void setPlantId(String plantId) {
+        this.plantId = plantId;
     }
 
     public String getQuantity() {
@@ -60,11 +31,11 @@ public class Carts {
         this.quantity = quantity;
     }
 
-    public String getPublisherId() {
-        return publisherId;
+    public String getPrice() {
+        return price;
     }
 
-    public void setPublisherId(String publisherId) {
-        this.publisherId = publisherId;
+    public void setPrice(String price) {
+        this.price = price;
     }
 }

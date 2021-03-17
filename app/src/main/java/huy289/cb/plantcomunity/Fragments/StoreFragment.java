@@ -64,7 +64,28 @@ public class StoreFragment extends Fragment {
         });
         getMyPlants();
 
+        // nếu có hàng trong giỏ thì đổi icon giỏ hàng -> xanh;
+        isCart();
+
         return view;
+    }
+
+    private void isCart() {
+        FirebaseDatabase.getInstance().getReference("Carts").child(fUser.getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.hasChildren()) {
+                    cart.setImageResource(R.drawable.ic_has_cart);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
     }
 
     private void getMyPlants() {

@@ -1,71 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="horizontal"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:weightSum="10"
-    android:layout_width="match_parent">
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:layout_weight="3"
-        tools:ignore="MissingConstraints">
+    android:orientation="vertical"
+    android:layout_marginTop="10dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <ImageView
+            android:layout_width="180dp"
+            android:layout_height="160dp"
+            android:id="@+id/image_plant"
+            android:src="@drawable/ic_leaf"
+            android:scaleType="centerInside"/>
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:id="@+id/imageviewCart"
-            android:layout_margin="5dp" />
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/image_plant"
+            android:orientation="vertical"
+            android:layout_marginStart="8dp"
+            android:layout_centerVertical="true">
 
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="0dp"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Plant name"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="18sp"
+                android:id="@+id/name"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="publisher"
+                android:textColor="@color/colorAccent"
+                android:textSize="16sp"
+                android:layout_marginTop="5dp"
+                android:id="@+id/publisher"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="address"
+                android:textColor="@color/colorPrimary"
+                android:textSize="16sp"
+                android:layout_marginTop="5dp"
+                android:id="@+id/address"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="quantity"
+                android:textColor="@color/colorAccent"
+                android:textSize="16sp"
+                android:layout_marginTop="5dp"
+                android:id="@+id/quantity"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="price"
+                android:textColor="@color/colorPrimary"
+                android:textSize="16sp"
+                android:layout_marginTop="5dp"
+                android:id="@+id/price"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="7"
-        android:layout_margin="5dp"
-        android:orientation="vertical"
-        android:layout_gravity="center">
+        android:text="Tổng tiền: "
+        android:padding="5dp"
+        android:textSize="17sp"
+        android:textColor="#FF1744"
+        android:id="@+id/total_price"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Name:"
-            android:id="@+id/twName"
-            android:textSize="25sp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2">
 
-        <TextView
-            android:layout_marginTop="3dp"
-            android:layout_width="wrap_content"
+        <Button
+            android:id="@+id/update"
+            android:backgroundTint="@color/colorPrimaryDark"
+            android:textColor="@color/colorWhite"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Price:"
-            android:id="@+id/twPrice"
-            android:textSize="15sp"/>
+            android:text="Sửa"
+            android:layout_weight="1"/>
 
-        <TextView
-            android:layout_marginTop="3dp"
-            android:layout_width="wrap_content"
+        <Button
+            android:id="@+id/delete"
+            android:backgroundTint="@color/colorAccent"
+            android:textColor="@color/colorWhite"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Quantity:"
-            android:id="@+id/twQuantity"
-            android:textSize="15sp"/>
-
-        <TextView
-            android:layout_marginTop="3dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Address:"
-            android:id="@+id/twAddress"
-            android:textSize="15sp"/>
-
-        <TextView
-            android:layout_marginTop="3dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Publisher:"
-            android:id="@+id/twPublisher"
-            android:textSize="15sp"/>
+            android:text="Xóa"
+            android:layout_weight="1"/>
 
     </LinearLayout>
 

@@ -1,97 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:orientation="vertical"
     android:layout_height="match_parent"
-    android:weightSum="10">
-    <Toolbar
-        android:background="@color/colorPrimaryDark"
-        android:titleTextColor="@color/colorWhite"
-        android:title="Your cart"
+    android:orientation="vertical"
+    android:weightSum="20">
+
+    <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/toolbar_Cart"></Toolbar>
+        android:id="@+id/toolbar"
+        android:background="?android:attr/windowBackground"/>
+
     <LinearLayout
-        android:layout_weight="7"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="18"
         android:orientation="vertical">
+
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:padding="10dp">
+
             <TextView
+                android:id="@+id/noti"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Your carts is empty!!!"
-                android:id="@+id/textviewTB"
-                android:layout_gravity="center"></TextView>
+                android:layout_gravity="center"
+                android:text="Giỏ hàng trống!!!"/>
+
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycle_view_cart"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/listCart"></androidx.recyclerview.widget.RecyclerView>
+                android:layout_height="match_parent"/>
+
         </FrameLayout>
+
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
         android:orientation="horizontal">
+
         <LinearLayout
-            android:layout_margin="5dp"
-            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:padding="10dp"
+            android:orientation="horizontal"
             android:weightSum="2">
+
             <LinearLayout
-                android:gravity="left|center"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:gravity="left|center">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="25sp"
-                    android:textColor="#f20"
-                    android:text="Total : "></TextView>
+                    android:id="@+id/total"
+                    android:text="Total : "
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="15sp"/>
             </LinearLayout>
+
             <LinearLayout
-                android:gravity="right|center"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:gravity="right|center">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="25sp"
-                    android:textColor="#f20"
-                    android:text="Price
-"></TextView>
+                    android:id="@+id/price"
+                    android:text="Price"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="15sp"/>
+
             </LinearLayout>
 
         </LinearLayout>
 
     </LinearLayout>
 
-
-<Button
-    android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight="1"
-    android:id="@+id/checkout"
-    android:text="Checkout"
-    android:textColor="#f20"
-    android:textSize="20sp"></Button>
     <Button
+        android:id="@+id/checkout"
+        style="@style/FirebaseUI.Button"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:id="@+id/back"
-        android:text="back"
-        android:textColor="#f20"
-        android:textSize="20sp"></Button>
-    </LinearLayout>
+        android:text="Mua hàng"
+        android:textSize="17sp" />
+</LinearLayout>
 
 
 
