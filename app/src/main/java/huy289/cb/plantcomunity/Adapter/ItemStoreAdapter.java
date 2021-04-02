@@ -150,11 +150,11 @@ public class ItemStoreAdapter extends RecyclerView.Adapter<ItemStoreAdapter.View
                         final DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Carts").child(fUser.getUid());
                         final HashMap<String, Object> map = new HashMap<>();
                         map.put("plantId", plant.getId());
-                        // addListenerForSingleValueEvent lấy dữ liệu 1 lần (ko realtime như addValueEventListener)
+                        // addListenerForSingleValueEvent chỉ lấy dữ liệu 1 lần (ko realtime như addValueEventListener)
                         ref.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                if (!snapshot.hasChildren()) {
+                                if (!snapshot.child(plant.getId()).hasChildren()) {
                                     map.put("quantity", quantity.getText().toString());
                                     map.put("price", plant.getPrice());
                                     FirebaseDatabase.getInstance().getReference("Carts")
@@ -164,7 +164,6 @@ public class ItemStoreAdapter extends RecyclerView.Adapter<ItemStoreAdapter.View
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
                                                 Toast.makeText(mContext, "Đã thêm vào giỏ hàng", Toast.LENGTH_SHORT).show();
-                                                Log.d("Them", "Đã thêm");
                                             }
                                         }
                                     });

@@ -15,6 +15,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -23,6 +25,7 @@ import java.util.List;
 import java.util.Locale;
 
 import huy289.cb.plantcomunity.AddPlantActivity;
+import huy289.cb.plantcomunity.DetailPlantActivity;
 import huy289.cb.plantcomunity.Model.Plant;
 import huy289.cb.plantcomunity.R;
 
@@ -30,6 +33,7 @@ public class MyPlantAdapter extends RecyclerView.Adapter<MyPlantAdapter.ViewHold
 
     private Context mContext;
     private List<Plant> mPlants;
+    private FirebaseUser fUser;
 
     public MyPlantAdapter(Context mContext, List<Plant> mPlants) {
         this.mContext = mContext;
@@ -58,20 +62,34 @@ public class MyPlantAdapter extends RecyclerView.Adapter<MyPlantAdapter.ViewHold
         holder.name.setText("Tên: " + plant.getName());
         holder.age.setText("Tuổi: " + plant.getAge());
         holder.address.setText("Địa chỉ: " + plant.getAddress());
-        holder.quantity.setText("Số lượng: " + plant.getQuantity());
+        holder.quantity.setText("Tổng số lượng: " + plant.getQuantity());
         Locale vn = new Locale("vi", "VN");
         NumberFormat vndFormat = NumberFormat.getCurrencyInstance(vn);
         holder.price.setText("Đơn giá: " + vndFormat.format(Float.parseFloat(plant.getPrice())));
 
-        holder.btnDetail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mContext, AddPlantActivity.class);
-                intent.putExtra("plantId", plant.getId());
-                intent.putExtra("publisherId", plant.getPublisher());
-                mContext.startActivity(intent);
-            }
-        });
+        fUser = FirebaseAuth.getInstance().getCurrentUser();
+        if(fUser.getUid().equals(plant.getPublisher())) {
+            holder.btnDetail.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, AddPlantActivity.class);
+                    intent.putExtra("plantId", plant.getId());
+                    intent.putExtra("publisherId", plant.getPublisher());
+                    mContext.startActivity(intent);
+                }
+            });
+        } else {
+            holder.btnDetail.setText("Xem chi tiết cây");
+            holder.btnDetail.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, DetailPlantActivity.class);
+                    intent.putExtra("plantId", plant.getId());
+                    mContext.startActivity(intent);
+                }
+            });
+        }
+
 
     }
 

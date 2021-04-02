@@ -8,6 +8,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -115,10 +116,23 @@ public class ProfileFragment extends Fragment {
         linearLayoutManager.setStackFromEnd(true);
         linearLayoutManager.setReverseLayout(true);
         recyclerViewPost.setLayoutManager(linearLayoutManager);
+        recyclerViewPost.addItemDecoration(new DividerItemDecoration(recyclerViewPost.getContext(), DividerItemDecoration.VERTICAL));
 
         myPostList = new ArrayList<>();
         postAdapter = new PostAdapter(getContext(), myPostList);
         recyclerViewPost.setAdapter(postAdapter);
+
+        //recycle view plant
+        recyclerViewPlant = view.findViewById(R.id.recycle_view_plants);
+        recyclerViewPlant.setHasFixedSize(true);
+        LinearLayoutManager linearLayoutManager1 = new LinearLayoutManager(getContext());
+        linearLayoutManager1.setStackFromEnd(true);
+        linearLayoutManager1.setReverseLayout(true);
+        recyclerViewPlant.setLayoutManager(linearLayoutManager1);
+        recyclerViewPlant.addItemDecoration(new DividerItemDecoration(recyclerViewPlant.getContext(), DividerItemDecoration.VERTICAL));
+        myPlantList = new ArrayList<>();
+        plantAdapter = new MyPlantAdapter(getContext(), myPlantList);
+        recyclerViewPlant.setAdapter(plantAdapter);
 
         fUser = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -135,6 +149,7 @@ public class ProfileFragment extends Fragment {
         getPostCount();
         getPlantCount();
         myPosts();
+        myPlants();
 
         if (profileId.equals(fUser.getUid())) {
             editProfile.setText("Chỉnh sửa thông tin cá nhân");
@@ -165,8 +180,46 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+        myPosts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                recyclerViewPost.setVisibility(View.VISIBLE);
+                recyclerViewPlant.setVisibility(View.GONE);
+            }
+        });
+
+        myPlants.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                recyclerViewPost.setVisibility(View.GONE);
+                recyclerViewPlant.setVisibility(View.VISIBLE);
+            }
+        });
+
         return view;
 
+    }
+
+    private void myPlants() {
+        FirebaseDatabase.getInstance().getReference("Plants").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                myPlantList.clear();
+                for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
+                    Plant plant = dataSnapshot.getValue(Plant.class);
+
+                    if(plant.getPublisher().equals(profileId)) {
+                        myPlantList.add(plant);
+                    }
+                }
+                plantAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     private void myPosts() {
