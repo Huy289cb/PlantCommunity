@@ -33,6 +33,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     private Context mContext;
     private List<User> mUsers;
     private boolean isFragment;
+    // limit
+    private final int limit = 10;
 
     private FirebaseUser firebaseUser;
 
@@ -126,7 +128,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return mUsers.size();
+        return mUsers.size() > limit ? limit : mUsers.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

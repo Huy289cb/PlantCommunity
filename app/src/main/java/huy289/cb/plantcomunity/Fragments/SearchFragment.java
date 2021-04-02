@@ -26,7 +26,10 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import huy289.cb.plantcomunity.Adapter.ItemStoreAdapter;
+import huy289.cb.plantcomunity.Adapter.MyPlantAdapter;
 import huy289.cb.plantcomunity.Adapter.UserAdapter;
+import huy289.cb.plantcomunity.Model.Plant;
 import huy289.cb.plantcomunity.Model.User;
 import huy289.cb.plantcomunity.R;
 public class SearchFragment extends Fragment {
@@ -36,11 +39,16 @@ public class SearchFragment extends Fragment {
     private List<User> mUsers;
     private UserAdapter userAdapter;
 
+    private RecyclerView recyclerViewPlant;
+    private List<Plant> mPlants;
+    private ItemStoreAdapter itemStoreAdapter;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
 
+        searchBar = view.findViewById(R.id.search_bar);
         recyclerView = view.findViewById(R.id.recycle_view_user);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -50,9 +58,16 @@ public class SearchFragment extends Fragment {
         userAdapter = new UserAdapter(getContext(), mUsers, true);
         recyclerView.setAdapter(userAdapter);
 
-        searchBar = view.findViewById(R.id.search_bar);
+        recyclerViewPlant = view.findViewById(R.id.recycle_view_plant);
+        recyclerViewPlant.setHasFixedSize(true);
+        recyclerViewPlant.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerViewPlant.addItemDecoration(new DividerItemDecoration(recyclerViewPlant.getContext(), DividerItemDecoration.VERTICAL));
+        mPlants = new ArrayList<>();
+        itemStoreAdapter = new ItemStoreAdapter(getContext(), mPlants);
+        recyclerViewPlant.setAdapter(itemStoreAdapter);
 
         readUsers();
+        readPlants();
 
         searchBar.addTextChangedListener(new TextWatcher() {
             @Override
@@ -63,6 +78,7 @@ public class SearchFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 searchUser(s.toString());
+                searchPlant(s.toString());
             }
 
             @Override
@@ -71,6 +87,50 @@ public class SearchFragment extends Fragment {
             }
         });
         return view;
+    }
+
+    private void readPlants() {
+        FirebaseDatabase.getInstance().getReference("Plants")
+                .addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(TextUtils.isEmpty(searchBar.getText().toString())){
+                    mPlants.clear();
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        Plant plant = dataSnapshot.getValue(Plant.class);
+                        mPlants.add(plant);
+                    }
+
+                    itemStoreAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void searchPlant (final String s) {
+        Query query = FirebaseDatabase.getInstance().getReference("Plants")
+                .orderByChild("name").startAt(s).endAt(s + "\uf8ff");
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                mPlants.clear();
+                for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
+                    Plant plant = dataSnapshot.getValue(Plant.class);
+                    mPlants.add(plant);
+                }
+                itemStoreAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     private void readUsers() {

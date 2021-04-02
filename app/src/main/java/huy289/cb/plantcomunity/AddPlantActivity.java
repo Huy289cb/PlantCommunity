@@ -3,6 +3,7 @@ package huy289.cb.plantcomunity;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -199,6 +200,7 @@ public class AddPlantActivity extends AppCompatActivity {
         linearLayoutManager.setStackFromEnd(true);
         linearLayoutManager.setReverseLayout(true);
         recyclerViewPrevention.setLayoutManager(linearLayoutManager);
+        recyclerViewPrevention.addItemDecoration(new DividerItemDecoration(recyclerViewPrevention.getContext(), DividerItemDecoration.VERTICAL));
         mPreventions = new ArrayList<>();
 
         preventionAdapter = new PreventionAdapter(this, mPreventions);
