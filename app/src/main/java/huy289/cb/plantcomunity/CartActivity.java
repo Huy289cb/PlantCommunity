@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -68,8 +69,8 @@ public class CartActivity extends AppCompatActivity{
         linearLayoutManager.setStackFromEnd(true);
         linearLayoutManager.setReverseLayout(true);
         recyclerViewCart.setLayoutManager(linearLayoutManager);
+        recyclerViewCart.addItemDecoration(new DividerItemDecoration(recyclerViewCart.getContext(), DividerItemDecoration.VERTICAL));
         cartsList = new ArrayList<>();
-
         cartAdapter = new CartAdapter(this, cartsList);
         recyclerViewCart.setAdapter(cartAdapter);
 

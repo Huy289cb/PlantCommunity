@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -55,6 +56,7 @@ public class MyPlantFragment extends Fragment {
         linearLayoutManager.setStackFromEnd(true);
         linearLayoutManager.setReverseLayout(true);
         recyclerViewMyPlants.setLayoutManager(linearLayoutManager);
+        recyclerViewMyPlants.addItemDecoration(new DividerItemDecoration(recyclerViewMyPlants.getContext(), DividerItemDecoration.VERTICAL));
         mPlants = new ArrayList<>();
 
         myPlantAdapter = new MyPlantAdapter(getContext(), mPlants);

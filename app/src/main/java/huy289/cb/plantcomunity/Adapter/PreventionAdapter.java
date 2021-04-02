@@ -2,6 +2,7 @@ package huy289.cb.plantcomunity.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,7 +50,7 @@ public class PreventionAdapter extends RecyclerView.Adapter<PreventionAdapter.Vi
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
 
         final Prevention prevention = mPreventions.get(position);
         Picasso.get().load(prevention.getImageUrl())
@@ -63,12 +64,17 @@ public class PreventionAdapter extends RecyclerView.Adapter<PreventionAdapter.Vi
         holder.performer.setText("Người thực hiện: " + prevention.getPerformer());
         holder.date.setText("Ngày: " + prevention.getDate());
 
+        fUser = FirebaseAuth.getInstance().getCurrentUser();
+
         FirebaseDatabase.getInstance().getReference("Plants").child(prevention.getPlantId())
                 .addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Plant plant = snapshot.getValue(Plant.class);
                 publisher = plant.getPublisher();
+                if (!fUser.getUid().equals(publisher)){
+                    holder.detail.setVisibility(View.GONE);
+                }
             }
 
             @Override
@@ -77,11 +83,7 @@ public class PreventionAdapter extends RecyclerView.Adapter<PreventionAdapter.Vi
             }
         });
 
-        fUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        if (!fUser.getUid().equals(publisher)){
-            holder.detail.setVisibility(View.GONE);
-        }
 
         holder.detail.setOnClickListener(new View.OnClickListener() {
             @Override
