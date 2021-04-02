@@ -63,8 +63,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         Picasso.get().load(user.getImageUrl())
                 .placeholder(R.mipmap.ic_launcher).into(holder.imageProfile);
 
-        isFollowed(user.getId(), holder.btnFollow);
-
         if(user.getId().equals(firebaseUser.getUid())){
             holder.btnFollow.setVisibility(View.GONE);
         }
@@ -81,47 +79,50 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         holder.btnFollow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(holder.btnFollow.getText().toString().equals("theo dõi")){
-                    FirebaseDatabase.getInstance().getReference("Follow")
-                            .child(firebaseUser.getUid()).child("following").child(user.getId())
-                            .setValue(true);
-
-                    FirebaseDatabase.getInstance().getReference("Follow")
-                            .child(user.getId()).child("followers").child(firebaseUser.getUid())
-                            .setValue(true);
-                } else {
-                    FirebaseDatabase.getInstance().getReference("Follow")
-                            .child(firebaseUser.getUid()).child("following").child(user.getId())
-                            .removeValue();
-
-                    FirebaseDatabase.getInstance().getReference("Follow")
-                            .child(user.getId()).child("followers").child(firebaseUser.getUid())
-                            .removeValue();
-                }
+                Intent intent = new Intent(mContext, MainActivity.class);
+                intent.putExtra("publisherId", user.getId());
+                mContext.startActivity(intent);
+//                if(holder.btnFollow.getText().toString().equals("theo dõi")){
+//                    FirebaseDatabase.getInstance().getReference("Follow")
+//                            .child(firebaseUser.getUid()).child("following").child(user.getId())
+//                            .setValue(true);
+//
+//                    FirebaseDatabase.getInstance().getReference("Follow")
+//                            .child(user.getId()).child("followers").child(firebaseUser.getUid())
+//                            .setValue(true);
+//                } else {
+//                    FirebaseDatabase.getInstance().getReference("Follow")
+//                            .child(firebaseUser.getUid()).child("following").child(user.getId())
+//                            .removeValue();
+//
+//                    FirebaseDatabase.getInstance().getReference("Follow")
+//                            .child(user.getId()).child("followers").child(firebaseUser.getUid())
+//                            .removeValue();
+//                }
             }
         });
     }
 
-    private void isFollowed(final String id, final Button btnFollow) {
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Follow")
-                .child(firebaseUser.getUid()).child("following");
-
-        reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.child(id).exists()){
-                    btnFollow.setText("đang theo dõi");
-                } else {
-                    btnFollow.setText("theo dõi");
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
+//    private void isFollowed(final String id, final Button btnFollow) {
+//        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Follow")
+//                .child(firebaseUser.getUid()).child("following");
+//
+//        reference.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                if(snapshot.child(id).exists()){
+//                    btnFollow.setText("đang theo dõi");
+//                } else {
+//                    btnFollow.setText("theo dõi");
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+//    }
 
     @Override
     public int getItemCount() {

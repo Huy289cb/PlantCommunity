@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -51,6 +52,8 @@ public class StoreFragment extends Fragment {
         recyclerViewProduct.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerViewProduct.setLayoutManager(linearLayoutManager);
+        // thêm dòng ngăn giữa các item
+        recyclerViewProduct.addItemDecoration(new DividerItemDecoration(recyclerViewProduct.getContext(), DividerItemDecoration.VERTICAL));
         mPlants = new ArrayList<>();
 
         ItemStoreAdapter = new ItemStoreAdapter(getContext(), mPlants);
@@ -62,7 +65,7 @@ public class StoreFragment extends Fragment {
                 startActivity(new Intent(getContext(), CartActivity.class));
             }
         });
-        getMyPlants();
+        getPlants();
 
         // nếu có hàng trong giỏ thì đổi icon giỏ hàng -> xanh;
         isCart();
@@ -72,7 +75,7 @@ public class StoreFragment extends Fragment {
 
     private void isCart() {
         FirebaseDatabase.getInstance().getReference("Carts").child(fUser.getUid())
-                .addListenerForSingleValueEvent(new ValueEventListener() {
+                .addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.hasChildren()) {
@@ -88,14 +91,18 @@ public class StoreFragment extends Fragment {
 
     }
 
-    private void getMyPlants() {
-        FirebaseDatabase.getInstance().getReference("Plants").addValueEventListener(new ValueEventListener() {
+    private void getPlants() {
+        FirebaseDatabase.getInstance().getReference("Plants")
+                .addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 mPlants.clear();
                 for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
                     Plant plant = dataSnapshot.getValue(Plant.class);
+                    // sản phẩm của mình k hiển thị trong cửa hàng
+                    if(!plant.getPublisher().equals(fUser.getUid())) {
                         mPlants.add(plant);
+                    }
                 }
                 if(mPlants.size()>0) {
                     ItemStoreAdapter.notifyDataSetChanged();

@@ -12,6 +12,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -26,6 +32,8 @@ public class PreventionAdapter extends RecyclerView.Adapter<PreventionAdapter.Vi
 
     private Context mContext;
     private List<Prevention> mPreventions;
+    private FirebaseUser fUser;
+    private String publisher;
 
     public PreventionAdapter(Context mContext, List<Prevention> mPreventions) {
         this.mContext = mContext;
@@ -54,6 +62,26 @@ public class PreventionAdapter extends RecyclerView.Adapter<PreventionAdapter.Vi
         holder.description.setText("Mô tả: " + prevention.getDescription());
         holder.performer.setText("Người thực hiện: " + prevention.getPerformer());
         holder.date.setText("Ngày: " + prevention.getDate());
+
+        FirebaseDatabase.getInstance().getReference("Plants").child(prevention.getPlantId())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Plant plant = snapshot.getValue(Plant.class);
+                publisher = plant.getPublisher();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        fUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (!fUser.getUid().equals(publisher)){
+            holder.detail.setVisibility(View.GONE);
+        }
 
         holder.detail.setOnClickListener(new View.OnClickListener() {
             @Override

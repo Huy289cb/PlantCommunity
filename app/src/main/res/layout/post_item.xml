@@ -77,42 +77,38 @@
                 android:src="@drawable/ic_like"
                 android:id="@+id/btn_like"/>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:gravity="center_vertical"
+                android:layout_marginStart="10dp"
+                android:id="@+id/no_of_likes"
+                android:text="123 likes"
+                android:layout_toEndOf="@+id/btn_like"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:textColor="@color/colorAccent"/>
+
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:src="@drawable/ic_comment"
-                android:layout_toEndOf="@+id/btn_like"
+                android:layout_toEndOf="@+id/no_of_likes"
                 android:id="@+id/btn_comment"
-                android:layout_marginStart="10dp"/>
-            
-            <ImageView
-                android:layout_width="30dp"
+                android:layout_marginStart="14dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="30dp"
-                android:src="@drawable/ic_save"
-                android:id="@+id/btn_save"
-                android:layout_alignParentEnd="true"
-                android:layout_marginEnd="5dp"/>
+                android:gravity="center_vertical"
+                android:id="@+id/no_of_comments"
+                android:layout_toEndOf="@+id/btn_comment"
+                android:layout_marginStart="10dp"
+                android:text="3 comments"
+                android:textSize="16sp"
+                android:textColor="@color/colorPrimaryDark"/>
 
         </RelativeLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:id="@+id/no_of_likes"
-            android:text="123 likes"
-            android:textStyle="bold"
-            android:textColor="@color/colorPrimaryDark"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:id="@+id/no_of_comments"
-            android:text="3 comments"
-            android:textColor="@color/colorAccent"/>
 
 
     </LinearLayout>

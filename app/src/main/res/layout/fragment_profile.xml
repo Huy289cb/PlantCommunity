@@ -24,20 +24,11 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Username"
                     android:textSize="18sp"
                     android:maxLines="1"
                     android:textStyle="bold"
                     android:id="@+id/username"
                     android:textColor="@color/colorPrimaryDark"/>
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/options"
-                    android:src="@drawable/ic_options"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="15dp"/>
 
             </RelativeLayout>
 
@@ -63,14 +54,14 @@
                 android:padding="15dp">
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
                     android:id="@+id/image_profile"
                     android:src="@drawable/ic_person"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="80dp"
+                    android:layout_height="90dp"
                     android:orientation="vertical"
                     android:paddingStart="20dp"
                     android:paddingEnd="5dp">
@@ -89,7 +80,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:id="@+id/posts"
+                                android:id="@+id/post_count"
                                 android:textColor="@color/colorPrimaryDark"
                                 android:layout_gravity="center"
                                 android:textSize="18sp"
@@ -99,7 +90,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="BÀI VIẾT"
-                                android:textSize="8sp" />
+                                android:textSize="12sp" />
 
                         </LinearLayout>
 
@@ -112,7 +103,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:id="@+id/follower"
+                                android:id="@+id/plant_count"
                                 android:textColor="@color/colorPrimaryDark"
                                 android:layout_gravity="center"
                                 android:textSize="18sp"
@@ -121,31 +112,8 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="NGƯỜI THEO DÕI"
-                                android:textSize="8sp" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:layout_marginStart="30dp">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:id="@+id/following"
-                                android:textColor="@color/colorPrimaryDark"
-                                android:layout_gravity="center"
-                                android:textSize="18sp"
-                                android:textStyle="bold"/>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="ĐANG THEO DÕI"
-                                android:textSize="8sp" />
+                                android:text="CÂY"
+                                android:textSize="12sp" />
 
                         </LinearLayout>
 
@@ -157,7 +125,9 @@
                         android:layout_marginTop="10dp"
                         android:id="@+id/edit_profile"
                         android:text="CHỈNH SỬA THÔNG TIN CÁ NHÂN"
-                        android:textSize="11sp"/>
+                        android:textSize="11sp"
+                        android:backgroundTint="@color/colorPrimaryDark"
+                        android:textColor="@color/colorWhite"/>
 
 
                 </LinearLayout>
@@ -204,7 +174,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:id="@+id/my_pictures"
+                    android:id="@+id/my_posts"
                     android:src="@drawable/ic_forum"
                     style="?android:attr/buttonBarButtonStyle"/>
 
@@ -212,7 +182,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:id="@+id/saved_pictures"
+                    android:id="@+id/my_plants"
                     android:src="@drawable/ic_leaf"
                     style="?android:attr/buttonBarButtonStyle"/>
                 
@@ -221,13 +191,12 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/recycle_view_pictures"/>
+                android:id="@+id/recycle_view_posts"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/recycle_view_saved"
-                android:visibility="gone"/>
+                android:id="@+id/recycle_view_plants"/>
 
         </LinearLayout>
         

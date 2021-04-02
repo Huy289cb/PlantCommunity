@@ -18,7 +18,9 @@ import com.google.android.material.snackbar.Snackbar;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 
 import huy289.cb.plantcomunity.AddPlantActivity;
 import huy289.cb.plantcomunity.Model.Plant;
@@ -57,7 +59,9 @@ public class MyPlantAdapter extends RecyclerView.Adapter<MyPlantAdapter.ViewHold
         holder.age.setText("Tuổi: " + plant.getAge());
         holder.address.setText("Địa chỉ: " + plant.getAddress());
         holder.quantity.setText("Số lượng: " + plant.getQuantity());
-        holder.price.setText("Giá: " + plant.getPrice() + " vnđ");
+        Locale vn = new Locale("vi", "VN");
+        NumberFormat vndFormat = NumberFormat.getCurrencyInstance(vn);
+        holder.price.setText("Đơn giá: " + vndFormat.format(Float.parseFloat(plant.getPrice())));
 
         holder.btnDetail.setOnClickListener(new View.OnClickListener() {
             @Override

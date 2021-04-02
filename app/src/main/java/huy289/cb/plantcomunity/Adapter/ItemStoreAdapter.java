@@ -32,8 +32,10 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
+import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import huy289.cb.plantcomunity.DetailPlantActivity;
@@ -74,7 +76,9 @@ public class ItemStoreAdapter extends RecyclerView.Adapter<ItemStoreAdapter.View
         holder.name.setText("Tên cây: " + plant.getName());
         holder.address.setText("Địa chỉ: " + plant.getAddress());
         holder.quantity.setText("Số lượng: " + plant.getQuantity());
-        holder.price.setText("Giá: " + plant.getPrice() + " vnđ");
+        Locale vn = new Locale("vi", "VN");
+        NumberFormat vndFormat = NumberFormat.getCurrencyInstance(vn);
+        holder.price.setText("Đơn giá: " + vndFormat.format(Float.parseFloat(plant.getPrice())));
         //Get publisher name
         FirebaseDatabase.getInstance().getReference("Users").child(plant.getPublisher())
                 .addValueEventListener(new ValueEventListener() {
@@ -93,6 +97,7 @@ public class ItemStoreAdapter extends RecyclerView.Adapter<ItemStoreAdapter.View
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, DetailPlantActivity.class);
+                intent.putExtra("plantId", plant.getId());
                 mContext.startActivity(intent);
             }
 
@@ -136,26 +141,6 @@ public class ItemStoreAdapter extends RecyclerView.Adapter<ItemStoreAdapter.View
                         }
                     }
                 });
-                // có bug
-//                quantity.addTextChangedListener(new TextWatcher() {
-//                    @Override
-//                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//                    }
-//                    @Override
-//                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-//
-//                    }
-//                    @Override
-//                    public void afterTextChanged(Editable s) {
-//                        if (Integer.parseInt(s.toString()) < 0) {
-//                            quantity.setText(0 + "");
-//                        }
-//                        if (Integer.parseInt(s.toString()) > Integer.parseInt(plant.getQuantity())) {
-//                            quantity.setText(Integer.parseInt(plant.getQuantity()));
-//                        }
-//                    }
-//                });
                 alertDialog.setTitle("Chọn số lượng");
                 alertDialog.setCancelable(false);
                 alertDialog.setPositiveButton("Thêm", new DialogInterface.OnClickListener() {
@@ -216,7 +201,6 @@ public class ItemStoreAdapter extends RecyclerView.Adapter<ItemStoreAdapter.View
                     }
                 });
                 alertDialog.show();
-
             }
         });
 

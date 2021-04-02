@@ -43,11 +43,10 @@
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="20dp"
                         android:layout_toEndOf="@+id/close"
+                        android:fontFamily="sans-serif-condensed"
                         android:text="tittle"
                         android:textAllCaps="true"
-                        android:textColor="@color/colorPrimaryDark"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
+                        android:textSize="26sp" />
 
                     <TextView
                         android:id="@+id/save"

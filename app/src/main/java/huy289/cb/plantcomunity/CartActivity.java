@@ -39,7 +39,7 @@ public class CartActivity extends AppCompatActivity{
     private TextView price;
     private Button checkout;
 
-    private float totalPrice = 0;
+    private float totalPrice;
 
     private FirebaseUser fUser;
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +104,7 @@ public class CartActivity extends AppCompatActivity{
 
                 // get total and price
                 if (cartsList.size() > 0) {
+                    totalPrice = 0;
                     total.setText("Tổng số sản phẩm: " + cartsList.size());
 
                     for (Cart cart : cartsList) {

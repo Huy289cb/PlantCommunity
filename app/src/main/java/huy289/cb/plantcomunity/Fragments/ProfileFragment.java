@@ -6,12 +6,16 @@ import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -35,30 +39,37 @@ import java.util.Collections;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import huy289.cb.plantcomunity.Adapter.MyPlantAdapter;
 import huy289.cb.plantcomunity.Adapter.PhotoAdapter;
 import huy289.cb.plantcomunity.Adapter.PostAdapter;
 import huy289.cb.plantcomunity.EditProfileActivity;
+import huy289.cb.plantcomunity.MainActivity;
+import huy289.cb.plantcomunity.Model.Plant;
 import huy289.cb.plantcomunity.Model.Post;
 import huy289.cb.plantcomunity.Model.User;
 import huy289.cb.plantcomunity.R;
+import huy289.cb.plantcomunity.StartActivity;
 
 public class ProfileFragment extends Fragment {
 
     private CircleImageView imageProfile;
-    private ImageView options;
-    private TextView posts;
-    private TextView follower;
-    private TextView following;
+    private TextView postCount;
+    private TextView plantCount;
     private TextView fullname;
     private TextView bio;
     private TextView username;
-    private ImageView myPictures;
-    private ImageView savedPictures;
+    private ImageView myPosts;
+    private ImageView myPlants;
     private Button editProfile;
+    private Toolbar toolbar;
 
-    private RecyclerView recyclerView;
+    private RecyclerView recyclerViewPost;
     private PostAdapter postAdapter;
     private List<Post> myPostList;
+
+    private RecyclerView recyclerViewPlant;
+    private MyPlantAdapter plantAdapter;
+    private List<Plant> myPlantList;
 
     private FirebaseUser fUser;
     String profileId;
@@ -70,27 +81,44 @@ public class ProfileFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
         imageProfile = view.findViewById(R.id.image_profile);
-        options = view.findViewById(R.id.options);
-        follower = view.findViewById(R.id.follower);
-        following = view.findViewById(R.id.following);
-        posts = view.findViewById(R.id.posts);
+        postCount = view.findViewById(R.id.post_count);
+        plantCount = view.findViewById(R.id.plant_count);
         bio = view.findViewById(R.id.bio);
         fullname = view.findViewById(R.id.fullname);
         username = view.findViewById(R.id.username);
-        myPictures = view.findViewById(R.id.my_pictures);
-        savedPictures = view.findViewById(R.id.saved_pictures);
+        myPosts = view.findViewById(R.id.my_posts);
+        myPlants = view.findViewById(R.id.my_plants);
         editProfile = view.findViewById(R.id.edit_profile);
+        toolbar = view.findViewById(R.id.toolbar);
 
-        recyclerView = view.findViewById(R.id.recycle_view_pictures);
-        recyclerView.setHasFixedSize(true);
+        toolbar.inflateMenu(R.menu.user_options_menu);
+
+
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.logout: {
+                        FirebaseAuth.getInstance().signOut();
+                        startActivity(new Intent(getContext(), StartActivity.class)
+                            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        break;
+                    }
+                }
+                return false;
+            }
+        });
+
+        recyclerViewPost = view.findViewById(R.id.recycle_view_posts);
+        recyclerViewPost.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setStackFromEnd(true);
         linearLayoutManager.setReverseLayout(true);
-        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerViewPost.setLayoutManager(linearLayoutManager);
 
         myPostList = new ArrayList<>();
         postAdapter = new PostAdapter(getContext(), myPostList);
-        recyclerView.setAdapter(postAdapter);
+        recyclerViewPost.setAdapter(postAdapter);
 
         fUser = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -104,14 +132,15 @@ public class ProfileFragment extends Fragment {
         }
 
         userInfo();
-        getFollowerAndFollowingCount();
         getPostCount();
-        myPhotos();
+        getPlantCount();
+        myPosts();
 
         if (profileId.equals(fUser.getUid())) {
             editProfile.setText("Chỉnh sửa thông tin cá nhân");
         } else {
-            checkFollowingStatus();
+//            checkFollowingStatus();
+            editProfile.setVisibility(View.GONE);
         }
 
         editProfile.setOnClickListener(new View.OnClickListener() {
@@ -121,17 +150,17 @@ public class ProfileFragment extends Fragment {
                 if(btnText.equals("Chỉnh sửa thông tin cá nhân")) {
                     startActivity(new Intent(getContext(), EditProfileActivity.class));
                 } else {
-                    if(btnText.equals("Theo dõi")) {
-                        FirebaseDatabase.getInstance().getReference("Follow").child(fUser.getUid())
-                                .child("following").child(profileId).setValue(true);
-                        FirebaseDatabase.getInstance().getReference("Follow").child(profileId)
-                                .child("followers").child(fUser.getUid()).setValue(true);
-                    } else {
-                        FirebaseDatabase.getInstance().getReference("Follow").child(fUser.getUid())
-                                .child("following").child(profileId).removeValue();
-                        FirebaseDatabase.getInstance().getReference("Follow").child(profileId)
-                                .child("followers").child(fUser.getUid()).removeValue();
-                    }
+//                    if(btnText.equals("Theo dõi")) {
+//                        FirebaseDatabase.getInstance().getReference("Follow").child(fUser.getUid())
+//                                .child("following").child(profileId).setValue(true);
+//                        FirebaseDatabase.getInstance().getReference("Follow").child(profileId)
+//                                .child("followers").child(fUser.getUid()).setValue(true);
+//                    } else {
+//                        FirebaseDatabase.getInstance().getReference("Follow").child(fUser.getUid())
+//                                .child("following").child(profileId).removeValue();
+//                        FirebaseDatabase.getInstance().getReference("Follow").child(profileId)
+//                                .child("followers").child(fUser.getUid()).removeValue();
+//                    }
                 }
             }
         });
@@ -140,7 +169,7 @@ public class ProfileFragment extends Fragment {
 
     }
 
-    private void myPhotos() {
+    private void myPosts() {
 
         FirebaseDatabase.getInstance().getReference("Posts").addValueEventListener(new ValueEventListener() {
             @Override
@@ -153,8 +182,6 @@ public class ProfileFragment extends Fragment {
                         myPostList.add(post);
                     }
                 }
-
-                Collections.reverse(myPostList);
                 postAdapter.notifyDataSetChanged();
             }
 
@@ -166,26 +193,26 @@ public class ProfileFragment extends Fragment {
 
     }
 
-    private void checkFollowingStatus() {
-
-        FirebaseDatabase.getInstance().getReference("Follow").child(fUser.getUid())
-                .child("following").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.child(profileId).exists()) {
-                    editProfile.setText("Đang theo dõi");
-                } else {
-                    editProfile.setText("Theo dõi");
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-    }
+//    private void checkFollowingStatus() {
+//
+//        FirebaseDatabase.getInstance().getReference("Follow").child(fUser.getUid())
+//                .child("following").addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                if(snapshot.child(profileId).exists()) {
+//                    editProfile.setText("Đang theo dõi");
+//                } else {
+//                    editProfile.setText("Theo dõi");
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+//
+//    }
 
     private void getPostCount() {
 
@@ -200,7 +227,7 @@ public class ProfileFragment extends Fragment {
                         counter ++;
                     }
                 }
-                posts.setText(String.valueOf(counter));
+                postCount.setText(String.valueOf(counter));
             }
 
             @Override
@@ -211,12 +238,20 @@ public class ProfileFragment extends Fragment {
 
     }
 
-    private void getFollowerAndFollowingCount() {
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Follow").child(profileId);
-        ref.child("followers").addValueEventListener(new ValueEventListener() {
+    private void getPlantCount() {
+
+        FirebaseDatabase.getInstance().getReference("Plants").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                follower.setText("" + snapshot.getChildrenCount());
+                int counter = 0;
+                for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
+                    Plant plant = dataSnapshot.getValue(Plant.class);
+
+                    if(plant.getPublisher().equals(profileId)) {
+                        counter ++;
+                    }
+                }
+                plantCount.setText(String.valueOf(counter));
             }
 
             @Override
@@ -225,18 +260,34 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        ref.child("following").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                following.setText("" + snapshot.getChildrenCount());
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
     }
+
+//    private void getFollowerAndFollowingCount() {
+//        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Follow").child(profileId);
+//        ref.child("followers").addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                follower.setText("" + snapshot.getChildrenCount());
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+//
+//        ref.child("following").addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                following.setText("" + snapshot.getChildrenCount());
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+//    }
 
     private void userInfo() {
 
@@ -249,6 +300,7 @@ public class ProfileFragment extends Fragment {
                 if(user.getImageUrl().equals("default")){
                     imageProfile.setImageResource(R.drawable.ic_person);
                 } else {
+                    //TODO sửa lại picasso.load
                     Picasso.get().load(user.getImageUrl()).into(imageProfile);
                 }
                 username.setText(user.getUsername());

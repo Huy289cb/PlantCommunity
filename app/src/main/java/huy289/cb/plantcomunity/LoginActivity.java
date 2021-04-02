@@ -38,6 +38,8 @@ public class LoginActivity extends AppCompatActivity {
         login = findViewById(R.id.btn_login);
         registerUser = findViewById(R.id.tv_register);
 
+        mAuth = FirebaseAuth.getInstance();
+
         registerUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

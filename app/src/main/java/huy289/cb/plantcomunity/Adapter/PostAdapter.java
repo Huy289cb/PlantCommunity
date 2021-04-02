@@ -124,7 +124,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         public ImageView postImage;
         public ImageView like;
         public ImageView comment;
-        public ImageView save;
         public ImageView more;
         public TextView username;
         public TextView noOfLikes;
@@ -139,7 +138,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             postImage = itemView.findViewById(R.id.post_image);
             like = itemView.findViewById(R.id.btn_like);
             comment = itemView.findViewById(R.id.btn_comment);
-            save = itemView.findViewById(R.id.btn_save);
             more = itemView.findViewById(R.id.btn_more);
             username = itemView.findViewById(R.id.username);
             noOfLikes = itemView.findViewById(R.id.no_of_likes);
