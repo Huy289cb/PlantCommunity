@@ -28,10 +28,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // check user có đăng nhập thì trở lại start activity
-        if(FirebaseAuth.getInstance().getCurrentUser()==null){
-            startActivity(new Intent(MainActivity.this, StartActivity.class)
-                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
-        }
+//        if(FirebaseAuth.getInstance().getCurrentUser()==null){
+//            startActivity(new Intent(MainActivity.this, StartActivity.class)
+//                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+//            finish();
+//        }
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
 

@@ -38,8 +38,6 @@ public class RegisterActivity extends AppCompatActivity {
     private Button register;
     private TextView loginUser;
 
-    private final String strRef = "https://plantcomunity-default-rtdb.firebaseio.com/";
-    private DatabaseReference mRootRef;
     private FirebaseAuth mAuth;
 
     private ProgressDialog pd;
@@ -57,7 +55,6 @@ public class RegisterActivity extends AppCompatActivity {
         register = findViewById(R.id.btn_register);
         loginUser = findViewById(R.id.tv_login);
 
-        mRootRef = FirebaseDatabase.getInstance().getReferenceFromUrl(strRef);
         mAuth = FirebaseAuth.getInstance();
 
         pd = new ProgressDialog(this);
@@ -111,7 +108,8 @@ public class RegisterActivity extends AppCompatActivity {
                         map.put("bio", "");
                         map.put("imageUrl", "default");
 
-                        mRootRef.child("Users").child(mAuth.getCurrentUser().getUid()).setValue(map)
+                        FirebaseDatabase.getInstance().getReference("Users")
+                                .child(mAuth.getCurrentUser().getUid()).setValue(map)
                                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {

@@ -18,7 +18,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -33,6 +35,7 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 import huy289.cb.plantcomunity.Adapter.MyPlantAdapter;
 import huy289.cb.plantcomunity.Adapter.PostAdapter;
+import huy289.cb.plantcomunity.ChangePasswordActivity;
 import huy289.cb.plantcomunity.EditProfileActivity;
 import huy289.cb.plantcomunity.Model.Plant;
 import huy289.cb.plantcomunity.Model.Post;
@@ -68,7 +71,7 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_profile, container, false);
+        final View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
         imageProfile = view.findViewById(R.id.image_profile);
         postCount = view.findViewById(R.id.post_count);
@@ -90,8 +93,13 @@ public class ProfileFragment extends Fragment {
                 switch (item.getItemId()){
                     case R.id.logout: {
                         FirebaseAuth.getInstance().signOut();
-                        startActivity(new Intent(getContext(), StartActivity.class)
-                            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        LoginManager.getInstance().logOut();
+                        startActivity(new Intent(getContext(), StartActivity.class));
+                        Toast.makeText(getContext(), "Đã đăng xuất", Toast.LENGTH_SHORT).show();
+                        break;
+                    }
+                    case R.id.change_password: {
+                        startActivity(new Intent(getContext(), ChangePasswordActivity.class));
                         break;
                     }
                 }
@@ -342,12 +350,19 @@ public class ProfileFragment extends Fragment {
                 if(user.getImageUrl().equals("default")){
                     imageProfile.setImageResource(R.drawable.ic_person);
                 } else {
-                    //TODO sửa lại picasso.load
-                    Picasso.get().load(user.getImageUrl()).into(imageProfile);
+                    Picasso.get().load(user.getImageUrl())
+                            .placeholder(R.drawable.ic_person)
+                            .resize(400, 400)
+                            .centerCrop()
+                            .onlyScaleDown()
+                            .into(imageProfile);
                 }
                 username.setText(user.getUsername());
                 fullname.setText(user.getFullname());
                 bio.setText(user.getBio());
+//                if (user.getFullname().equals("")) {
+//                    Toast.makeText(getContext(), "Hãy cập nhật thông tin cá nhân để có trải nghiệm tốt hơn", Toast.LENGTH_LONG).show();
+//                }
             }
 
             @Override

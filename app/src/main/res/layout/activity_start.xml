@@ -16,29 +16,49 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="30dp"
-        android:text="Hội cây cảnh"
+        android:text="Plant Community"
+        android:fontFamily="sans-serif-condensed"
         android:textAllCaps="true"
         android:textColor="@color/colorPrimaryDark"
-        android:textSize="36sp"
+        android:textSize="40sp"
         android:textStyle="bold" />
 
     <Button
         android:id="@+id/login"
-        style="@style/FirebaseUI.Button.AccountChooser.AnonymousButton"
+        android:backgroundTint="@color/colorAccent"
+        android:textColor="@color/colorWhite"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:textSize="16sp"
         android:text="Đăng nhập"
         android:textAlignment="center"
         android:textAllCaps="true" />
 
     <Button
         android:id="@+id/btn_register"
-        style="@style/FirebaseUI.Button.AccountChooser.EmailButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
+        android:backgroundTint="@color/fui_bgTwitter"
         android:text="Đăng ký"
         android:textAlignment="center"
-        android:textAllCaps="true" />
+        android:textAllCaps="true"
+        android:textColor="@color/colorWhite"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/facebook"
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/custom_fb_button"
+        android:drawableStart="@drawable/ic_facebook_app_logo"
+        android:drawableLeft="@drawable/ic_facebook_app_logo"
+        android:paddingHorizontal="30dp"
+        android:text="Đăng nhập bằng Facebook"
+        android:textAllCaps="true"
+        android:textColor="@color/colorWhite"
+        android:textSize="16sp" />
+
 </LinearLayout>

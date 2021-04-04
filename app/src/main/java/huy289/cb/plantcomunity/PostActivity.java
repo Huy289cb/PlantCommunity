@@ -38,7 +38,7 @@ public class PostActivity extends AppCompatActivity {
     private ImageView close;
     private ImageView imageAdded;
     private TextView post;
-    private TextView title;
+//    private TextView title;
     private TextView description;
 
     private TextView progressText;
@@ -55,7 +55,7 @@ public class PostActivity extends AppCompatActivity {
         close = findViewById(R.id.close);
         imageAdded = findViewById(R.id.image_added);
         post = findViewById(R.id.post);
-        title = findViewById(R.id.title);
+//        title = findViewById(R.id.title);
         description = findViewById(R.id.description);
 
         progressText = findViewById(R.id.progress_text);
@@ -118,7 +118,7 @@ public class PostActivity extends AppCompatActivity {
                     HashMap<String, Object> map = new HashMap<>();
                     map.put("postId", postId);
                     map.put("imageUrl", imageUrl);
-                    map.put("title", title.getText().toString());
+//                    map.put("title", title.getText().toString());
                     map.put("description", description.getText().toString());
                     map.put("publisher", FirebaseAuth.getInstance().getCurrentUser().getUid());
 
