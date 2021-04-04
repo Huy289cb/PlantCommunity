@@ -1,5 +1,6 @@
 package huy289.cb.plantcomunity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -79,6 +80,11 @@ public class CartActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 //TODO checkout activity;
+                Intent intent = new Intent(CartActivity.this, CheckoutActivity.class);
+                intent.putExtra("itemCount", cartsList.size() + "");
+                intent.putExtra("total", totalPrice + "");
+                startActivity(intent);
+                finish();
             }
         });
     }
@@ -114,7 +120,6 @@ public class CartActivity extends AppCompatActivity{
                         totalPrice = (float) (totalPrice + (quantity * price));
                     }
                     Locale vn = new Locale("vi", "VN");
-//                    Currency vnd = Currency.getInstance(vn);
                     NumberFormat vndFormat = NumberFormat.getCurrencyInstance(vn);
                     price.setText("Tổng tiền: " + vndFormat.format(totalPrice));
 

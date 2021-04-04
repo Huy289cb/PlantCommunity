@@ -15,34 +15,40 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="18"
+        android:layout_weight="16"
         android:orientation="vertical">
 
-        <FrameLayout
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="10dp">
+            android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/noti"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Giỏ hàng trống!!!"/>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycle_view_cart"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:padding="10dp">
 
-        </FrameLayout>
+                <TextView
+                    android:id="@+id/noti"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Giỏ hàng trống!!!"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycle_view_cart"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+
+            </FrameLayout>
+
+        </androidx.core.widget.NestedScrollView>
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_weight="2"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -62,7 +68,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/total"
-                    android:text="Total : "
+                    android:text="itemCount"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="15sp"/>
             </LinearLayout>
@@ -92,9 +98,10 @@
         style="@style/FirebaseUI.Button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_weight="2"
         android:text="Mua hàng"
         android:textSize="17sp" />
+
 </LinearLayout>
 
 
